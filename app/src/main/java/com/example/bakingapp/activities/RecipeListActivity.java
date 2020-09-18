@@ -9,8 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.bakingapp.api.ApiClient;
+import com.example.bakingapp.api.ApiInterface;
 import com.example.bakingapp.fragments.ItemDetailFragment;
 import com.example.bakingapp.R;
+import com.example.bakingapp.model.RecipeModel;
+import com.example.bakingapp.model.RecipesModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -21,23 +25,19 @@ import android.widget.TextView;
 
 import com.example.bakingapp.data.DummyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RecipeDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RecipeListActivity extends AppCompatActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
+    private ApiInterface mApiInterface;
     private boolean mTwoPane;
+    private FloatingActionButton mFab;
+    private List<RecipesModel> mRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +47,13 @@ public class RecipeListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+        mApiInterface = ApiClient.getClient(this).create(ApiInterface.class);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                fetchRecipes(mApiInterface.doGetRecipes());
             }
         });
 
@@ -68,6 +68,32 @@ public class RecipeListActivity extends AppCompatActivity {
         View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
+        fetchRecipes(mApiInterface.doGetRecipes());
+
+    }
+
+    private void fetchRecipes(Call<List<RecipesModel>> call) {
+        call.enqueue(new Callback<List<RecipesModel>>() {
+            @Override
+            public void onResponse(Call<List<RecipesModel>> call, Response<List<RecipesModel>> response) {
+                Snackbar.make(mFab, "Fetch Success", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                List<RecipesModel> recipes = response.body();
+                if (recipes == null) {
+                    return;
+                }
+                mRecipes = recipes;
+                System.out.println(recipes);
+            }
+
+            @Override
+            public void onFailure(Call<List<RecipesModel>> call, Throwable t) {
+                Snackbar.make(mFab, "Fetch Failed", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                call.cancel();
+            }
+        });
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
