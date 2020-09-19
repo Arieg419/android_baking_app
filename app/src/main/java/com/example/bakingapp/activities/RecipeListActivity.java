@@ -13,7 +13,6 @@ import com.example.bakingapp.api.ApiClient;
 import com.example.bakingapp.api.ApiInterface;
 import com.example.bakingapp.fragments.ItemDetailFragment;
 import com.example.bakingapp.R;
-import com.example.bakingapp.model.RecipeModel;
 import com.example.bakingapp.model.RecipesModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 
 import com.example.bakingapp.data.DummyContent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -139,7 +137,7 @@ public class RecipeListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_content, parent, false);
+                    .inflate(R.layout.recipe_list_item, parent, false);
             return new ViewHolder(view);
         }
 
