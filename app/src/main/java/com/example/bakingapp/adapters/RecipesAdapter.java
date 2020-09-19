@@ -13,14 +13,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bakingapp.R;
-import com.example.bakingapp.model.RecipesModel;
+import com.example.bakingapp.model.RecipeModel;
 
 import java.util.List;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
     Context mContext;
     RecyclerView mRecyclerView;
-    List<RecipesModel> mRecipes;
+    List<RecipeModel> mRecipes;
+    boolean mTwoPane;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,19 +34,18 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         public ViewHolder(View view) {
             super(view);
             itemView = view;
-//            name = itemView.findViewById(R.id.textview_movie_name);
-//            servings = itemView.findViewById(R.id.textview_movie_rating);
-//            image = itemView.findViewById(R.id.imageview_movie_poster);
+            name = itemView.findViewById(R.id.id_text);
+            servings = itemView.findViewById(R.id.content);
         }
     }
 
-    public RecipesAdapter(Context context, List<RecipesModel> recipes, RecyclerView rv) {
+    public RecipesAdapter(Context context, List<RecipeModel> recipes, RecyclerView rv, boolean twoPane) {
         super();
         mRecipes = recipes;
         mContext = context;
         mRecyclerView = rv;
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(context, 1));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
     }
 
     @Override
@@ -65,34 +65,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-//        PopularMoviesModel movie = mPopularMovies.get(position);
-//        holder.movieId = movie.id;
-//        holder.movieTitle.setText(movie.title);
-//        holder.movieRating.setText(Double.toString(movie.voteAverage));
-//        String imgPath = getMovieDetailPosterPath(mContext, movie.posterPath, 400);
-//        Picasso.get().load(imgPath).into(holder.moviePoster);
-//
-//        holder.itemView.setOnClickListener(view -> {
-//            Bundle detailBundle = new Bundle();
-//            detailBundle.putString(TITLE, movie.title);
-//            detailBundle.putString(OVERVIEW, movie.overview);
-//            detailBundle.putString(RELEASE_DATE, movie.releaseDate);
-//            detailBundle.putString(RATING, movie.voteAverage.toString());
-//            detailBundle.putString(POSTER_PATH, movie.posterPath);
-//            detailBundle.putLong(MOVIE_ID, movie.id);
-//            Intent movieDetailIntent = new Intent(mContext, MovieDetailActivity.class);
-//            movieDetailIntent.putExtras(detailBundle);
-//            (mContext).startActivity(movieDetailIntent);
-//        });
-    }
-
-    public void addAll(List<RecipesModel> recipes) {
-        mRecipes.addAll(recipes);
-        notifyDataSetChanged();
-    }
-
-    public void clear() {
-        mRecipes.clear();
-        notifyDataSetChanged();
+        RecipeModel recipe = mRecipes.get(position);
+        System.out.println("found recipe!");
+        System.out.println(recipe);
+        holder.name.setText(recipe.name);
+        holder.servings.setText(recipe.servings);
+        holder.itemView.setTag(mRecipes.get(position));
     }
 }

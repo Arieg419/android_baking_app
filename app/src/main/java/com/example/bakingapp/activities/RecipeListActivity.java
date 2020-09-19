@@ -3,26 +3,25 @@ package com.example.bakingapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
-import com.example.bakingapp.api.ApiClient;
-import com.example.bakingapp.api.ApiInterface;
-import com.example.bakingapp.fragments.ItemDetailFragment;
-import com.example.bakingapp.R;
-import com.example.bakingapp.model.RecipesModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bakingapp.R;
+import com.example.bakingapp.adapters.RecipesAdapter;
+import com.example.bakingapp.api.ApiClient;
+import com.example.bakingapp.api.ApiInterface;
 import com.example.bakingapp.data.DummyContent;
+import com.example.bakingapp.fragments.ItemDetailFragment;
+import com.example.bakingapp.model.RecipeModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -35,7 +34,9 @@ public class RecipeListActivity extends AppCompatActivity {
     private ApiInterface mApiInterface;
     private boolean mTwoPane;
     private FloatingActionButton mFab;
-    private List<RecipesModel> mRecipes;
+    private List<RecipeModel> mRecipes;
+    private RecipesAdapter mRecipesAdapter;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,39 +64,33 @@ public class RecipeListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        View recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-
+        mRecyclerView = findViewById(R.id.item_list);
         fetchRecipes(mApiInterface.doGetRecipes());
-
     }
 
-    private void fetchRecipes(Call<List<RecipesModel>> call) {
-        call.enqueue(new Callback<List<RecipesModel>>() {
+    private void fetchRecipes(Call<List<RecipeModel>> call) {
+        call.enqueue(new Callback<List<RecipeModel>>() {
             @Override
-            public void onResponse(Call<List<RecipesModel>> call, Response<List<RecipesModel>> response) {
+            public void onResponse(Call<List<RecipeModel>> call, Response<List<RecipeModel>> response) {
                 Snackbar.make(mFab, "Fetch Success", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                List<RecipesModel> recipes = response.body();
-                if (recipes == null) {
+                List<RecipeModel> recipesData = response.body();
+                if (recipesData == null) {
                     return;
                 }
-                mRecipes = recipes;
-                System.out.println(recipes);
+                mRecipes = recipesData;
+                mRecipesAdapter = new RecipesAdapter(getApplicationContext(), mRecipes, mRecyclerView, mTwoPane);
+                mRecyclerView.setAdapter(mRecipesAdapter);
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
             }
 
             @Override
-            public void onFailure(Call<List<RecipesModel>> call, Throwable t) {
+            public void onFailure(Call<List<RecipeModel>> call, Throwable t) {
                 Snackbar.make(mFab, "Fetch Failed", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 call.cancel();
             }
         });
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter

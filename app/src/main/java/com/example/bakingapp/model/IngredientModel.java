@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class IngredientModel {
     @SerializedName("quantity")
-    public Long quantity;
+    public Double quantity;
     @SerializedName("measure")
     public String measure;
     @SerializedName("ingredient")
