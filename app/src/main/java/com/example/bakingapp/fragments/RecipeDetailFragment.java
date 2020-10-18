@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.activities.RecipeDetailActivity;
 import com.example.bakingapp.activities.RecipeListActivity;
 import com.example.bakingapp.constants.RecipeDetailConstants;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -44,10 +46,16 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.item_detail, container, false);
-        if (mName != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mName);
-        }
+        View rootView = inflater.inflate(R.layout.recipe_tabbed_detail, container, false);
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+        viewPager.setAdapter(new RecipeDetailFragmentPagerAdapter(getFragmentManager(),
+                getActivity()));
+
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
         return rootView;
     }
 }
