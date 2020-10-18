@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 public class RecipeDetailFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
+    final int PAGE_COUNT = 2;
+    private String tabTitles[] = new String[] { "Ingredients", "Steps"  };
     private Context context;
 
     public RecipeDetailFragmentPagerAdapter (FragmentManager fm, Context context) {
