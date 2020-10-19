@@ -13,12 +13,13 @@ import com.example.bakingapp.R;
 public class RecipeDetailPageTabFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final String ARG_INGREDIENTS = "ARG_INGREDIENTS ";
 
-    private int mPage;
+    private CharSequence mPage;
 
-    public static RecipeDetailPageTabFragment newInstance(int page) {
+    public static RecipeDetailPageTabFragment newInstance(CharSequence title) {
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
+        args.putCharSequence(ARG_PAGE, title);
         RecipeDetailPageTabFragment fragment = new RecipeDetailPageTabFragment();
         fragment.setArguments(args);
         return fragment;
@@ -27,16 +28,19 @@ public class RecipeDetailPageTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
+        assert getArguments() != null;
+        mPage = getArguments().getCharSequence(ARG_PAGE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recipe_fragment_tab_page, container, false);
-        TextView textView = (TextView) view;
-        textView.setText("Fragment #" + mPage);
-        return view;
+        View rootView = inflater.inflate(R.layout.recipe_fragment_tab_page, container, false);
+        TextView textView = (TextView) rootView.findViewById(R.id.recipe_tab_non_static);
+        textView.setText(mPage);
+        TextView textView1 = (TextView) rootView.findViewById(R.id.recipe_tab_static);
+        textView1.setText(mPage);
+        return rootView;
     }
 
 }

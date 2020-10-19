@@ -2,6 +2,7 @@ package com.example.bakingapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeModel {
@@ -10,7 +11,7 @@ public class RecipeModel {
     @SerializedName("name")
     public String name;
     @SerializedName("ingredients")
-    public List<IngredientModel> ingredients = null;
+    public ArrayList<IngredientModel> ingredients = null;
     @SerializedName("steps")
     public List<StepModel> steps = null;
     @SerializedName("servings")

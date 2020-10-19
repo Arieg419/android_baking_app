@@ -19,9 +19,12 @@ import com.example.bakingapp.activities.RecipeDetailActivity;
 import com.example.bakingapp.activities.RecipeListActivity;
 import com.example.bakingapp.constants.RecipeDetailConstants;
 import com.example.bakingapp.fragments.RecipeDetailFragment;
+import com.example.bakingapp.model.IngredientModel;
 import com.example.bakingapp.model.RecipeModel;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
@@ -84,6 +87,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         String recipeImage = recipe.image;
         String recipeName = recipe.name;
         String recipeServings = recipe.servings + " servings";
+        ArrayList<IngredientModel> ingredients = recipe.ingredients;
+
         holder.name.setText(recipeName);
         holder.servings.setText(recipeServings);
         if (recipeImage != null && !recipeImage.trim().isEmpty()) {
@@ -97,9 +102,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                 arguments.putString(RecipeDetailConstants.NAME, recipeName);
                 arguments.putString(RecipeDetailConstants.SERVINGS, recipeServings);
                 arguments.putString(RecipeDetailConstants.IMAGE, recipeImage);
+                arguments.putSerializable(RecipeDetailConstants.INGREDIENTS, ingredients);
                 RecipeDetailFragment fragment = new RecipeDetailFragment();
                 fragment.setArguments(arguments);
-                System.out.println("Omer -> tablet detail setting fragment");
                 mParentActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.item_detail_container, fragment)
                         .commit();
@@ -110,6 +115,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                 intent.putExtra(RecipeDetailConstants.NAME, recipeName);
                 intent.putExtra(RecipeDetailConstants.SERVINGS, recipeServings);
                 intent.putExtra(RecipeDetailConstants.IMAGE, recipeImage);
+                Bundle b = new Bundle();
+                b.putSerializable(RecipeDetailConstants.INGREDIENTS, (Serializable) ingredients);
+                intent.putExtra("BUNDLE", b);
                 context.startActivity(intent);
             }
         });

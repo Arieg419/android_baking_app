@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.example.bakingapp.constants.RecipeDetailConstants;
 import com.example.bakingapp.fragments.RecipeDetailFragment;
 import com.example.bakingapp.R;
+import com.example.bakingapp.model.IngredientModel;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -17,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.ActionBar;
 
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+
+import static com.example.bakingapp.constants.RecipeDetailConstants.INGREDIENTS;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -34,8 +40,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
+            Intent intent = getIntent();
             arguments.putString(RecipeDetailConstants.NAME,
-                    getIntent().getStringExtra(RecipeDetailConstants.NAME));
+                    intent.getStringExtra(RecipeDetailConstants.NAME));
+            ArrayList<IngredientModel> li = (ArrayList<IngredientModel>) intent.getBundleExtra("BUNDLE").getSerializable(RecipeDetailConstants.INGREDIENTS);
+            arguments.putSerializable(INGREDIENTS, li);
             RecipeDetailFragment fragment = new RecipeDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
