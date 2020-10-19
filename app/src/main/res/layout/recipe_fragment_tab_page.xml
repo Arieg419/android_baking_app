@@ -17,16 +17,14 @@
         android:padding="16dp"
         android:textSize="20sp"
         />
-    <TextView
-        android:id="@+id/recipe_tab_static"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        android:textSize="20sp"
-        android:text="RecyclerView"
-        />
+        <androidx.recyclerview.widget.RecyclerView
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/ingredient_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            tools:listitem="@layout/recipe_detail_ingredient_row" />
     </LinearLayout>
 </ScrollView>
 

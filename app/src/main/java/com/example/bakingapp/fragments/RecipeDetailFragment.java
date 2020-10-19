@@ -66,7 +66,7 @@ public class RecipeDetailFragment extends Fragment {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         viewPager.setAdapter(new RecipeDetailFragmentPagerAdapter(getChildFragmentManager(),
-                getActivity()));
+                getActivity(), mIngredients));
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.sliding_tabs);

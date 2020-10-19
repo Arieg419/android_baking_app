@@ -8,14 +8,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.bakingapp.fragments.RecipeDetailPageTabFragment;
+import com.example.bakingapp.model.IngredientModel;
+
+import java.util.ArrayList;
 
 public class RecipeDetailFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
     private String[] mTabTitles = new String[] { "Ingredients", "Steps"  };
     private Context mContext;
+    private ArrayList<IngredientModel> mIngredientsList;
+    private RecipeDetailIngredientsAdapter mRecipeIngredientsAdapter;
 
-    public RecipeDetailFragmentPagerAdapter (FragmentManager fm, Context context) {
+    public RecipeDetailFragmentPagerAdapter (FragmentManager fm, Context context, ArrayList<IngredientModel> ingredientList) {
         super(fm);
+        this.mIngredientsList = ingredientList;
         this.mContext = context;
     }
 
@@ -27,7 +33,7 @@ public class RecipeDetailFragmentPagerAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return RecipeDetailPageTabFragment.newInstance(mTabTitles[position]);
+        return RecipeDetailPageTabFragment.newInstance(mTabTitles[position], mIngredientsList);
     }
 
     @Override
